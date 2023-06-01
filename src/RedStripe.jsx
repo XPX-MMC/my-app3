@@ -1,32 +1,25 @@
 import React, { useState} from "react";
-import axios from "axios";
-import { useQuery } from "react-query";
 import './RedStripe.scss';
+
+// Using fetch
 
 export const RedStripe = () => {
     let [userName, setUserName] = useState('');
 
     const url = `https://jsonplaceholder.typicode.com/users/1`;
 
-    const usersQuery = useQuery(`users/1`, async () => await axios.get(url), 
-        {
-            refetchOnWindowFocus: false,
-            enabled: false
-        }
-    );
-    
+   const onHandlePush = async () => {
+    try{
 
-    if (usersQuery.isFetched) {
-        if (userName === "") {
-            setUserName(usersQuery.data.data.name);
-        }
-        console.log(usersQuery);
+        const response = await fetch(url);
+        const data = await response.json();
+        setUserName(data.name);
+        console.log(`data from API: ${JSON.stringify(data)}`);
+        
+    } catch (error) {
+        console.log(`Error fetching user data: ${error}`)
     }
-
-
-    const onHandlePush = () => {
-        usersQuery.refetch();
-    }
+   }
 
     return (
         <div className="RedStripe">
