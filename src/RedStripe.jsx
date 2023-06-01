@@ -1,10 +1,17 @@
-import React, { useState} from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useRecoilState } from "recoil";
+import { userNameAtom } from "./atoms";
 import './RedStripe.scss';
+import App from "./App";
 
 export const RedStripe = () => {
-    let [userName, setUserName] = useState('');
+    // regular state variable
+    let [email, setEmail] = useState("");
+
+    // upgraded state variable
+    let [userName, setUserName] = useRecoilState(userNameAtom);
 
     const url = `https://jsonplaceholder.typicode.com/users/1`;
 
@@ -14,15 +21,20 @@ export const RedStripe = () => {
             enabled: false
         }
     );
-    
 
-    if (usersQuery.isFetched) {
-        if (userName === "") {
-            setUserName(usersQuery.data.data.name);
+        //         App
+        //         /  \
+        // RedStripe BlueStripe
+
+    useEffect(() => {
+        if (usersQuery.isFetched && userName === "") {
+                setUserName(usersQuery.data.data.name);
+                setEmail(usersQuery.data.data.email);
+            console.log(usersQuery);
         }
-        console.log(usersQuery);
-    }
 
+    }, [userName, setEmail, setUserName, usersQuery]
+    );
 
     const onHandlePush = () => {
         usersQuery.refetch();
