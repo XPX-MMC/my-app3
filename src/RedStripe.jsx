@@ -2,7 +2,7 @@ import React, { useState} from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import './RedStripe.scss';
-
+//React Query module
 export const RedStripe = () => {
     let [userName, setUserName] = useState('');
 
